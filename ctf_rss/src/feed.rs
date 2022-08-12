@@ -5,6 +5,7 @@ use reqwest;
 use rss::Channel;
 
 const CTFTIME_UPCOMING_RSS: &str = "https://ctftime.org/event/list/upcoming/rss/";
+const CTFTIME_ACTIVE_RSS: &str = "https://ctftime.org/event/list/running/rss/";
 
 pub fn print_rss_item(item: &rss::Item) {
     println!(
@@ -36,10 +37,16 @@ pub struct FeedsMap {
 impl FeedsMap {
     pub fn new<'a>() -> FeedsMap {
         FeedsMap {
-            feeds: HashMap::from([(
-                String::from("ctftime_upcoming"),
-                String::from(CTFTIME_UPCOMING_RSS),
-            )]),
+            feeds: HashMap::from([
+                (
+                    String::from("ctftime_upcoming"),
+                    String::from(CTFTIME_UPCOMING_RSS),
+                ),
+                (
+                    String::from("ctftime_active"),
+                    String::from(CTFTIME_ACTIVE_RSS),
+                ),
+            ]),
         }
     }
 
@@ -63,6 +70,6 @@ impl FeedsMap {
                 }
                 _ => println!("Couldn't find value"),
             };
-        };
+        }
     }
 }
