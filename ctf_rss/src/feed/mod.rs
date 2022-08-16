@@ -3,6 +3,8 @@ use std::error::Error;
 
 use reqwest;
 use rss::Channel;
+use html2text;
+use terminal_size::{Width, Height, terminal_size};
 
 const CTFTIME_UPCOMING_RSS: &str = "https://ctftime.org/event/list/upcoming/rss/";
 const CTFTIME_ACTIVE_RSS: &str = "https://ctftime.org/event/list/running/rss/";
@@ -18,9 +20,9 @@ pub fn print_rss_item(item: &rss::Item) {
     );
     println!(
         "Description:\n{}",
-        item.description().expect("couldn't find string")
+        convert_html_to_text(item.description().expect("couldn't find string")),
     );
-    println!("-----------");
+    println!("");
 }
 
 pub fn print_rss_title(item: &rss::Item) {
@@ -28,6 +30,16 @@ pub fn print_rss_title(item: &rss::Item) {
         "Title: {}",
         item.title().expect("couldn't find title")
     );
+}
+
+fn convert_html_to_text(html: &str) -> String {
+    // BUG: this cannot find the size of terminal when piped into less.
+    // The way it is now it will use the None match arm in that case.
+    let (Width(term_width), _) = match terminal_size() {
+        Some(value) => value,
+        None => (Width(200), Height(200)),
+    };
+    html2text::from_read(html.as_bytes(), term_width.into())
 }
 
 pub async fn read_feed(url: &str) -> Result<Channel, Box<dyn Error>> {

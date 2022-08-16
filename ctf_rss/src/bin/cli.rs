@@ -21,6 +21,8 @@ async fn main() {
     let mut rss_actions: Vec<fn(&rss::Item)> = Vec::new();
     if args.verbose {
         rss_actions.push(feed::print_rss_item);
+    } else if !args.title.is_empty() {
+        rss_actions.push(feed::print_rss_item);
     } else {
         rss_actions.push(feed::print_rss_title);
     }
