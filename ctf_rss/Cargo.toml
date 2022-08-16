@@ -9,3 +9,9 @@ edition = "2021"
 rss = "1.10.0"
 reqwest = "0.11.11"
 tokio = { version = "1", features = ["full"]}
+structopt = { version = "0.3", default-features = false }
+html2text = "0.4.2"
+terminal_size = "0.2.1"
+
+[lib]
+name = "ctf_rss"
