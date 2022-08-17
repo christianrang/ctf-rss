@@ -14,7 +14,7 @@ struct Cli {
 
 #[tokio::main]
 async fn main() {
-    let feed_map = feed::FeedsMap::new();
+    let mut feed_map = feed::FeedsMap::new();
 
     let args = Cli::from_args();
 

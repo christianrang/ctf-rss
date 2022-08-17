@@ -51,6 +51,7 @@ pub async fn read_feed(url: &str) -> Result<Channel, Box<dyn Error>> {
 
 pub struct FeedsMap {
     feeds: HashMap<String, String>,
+    channel: rss::Channel,
 }
 
 impl FeedsMap {
@@ -66,6 +67,7 @@ impl FeedsMap {
                     String::from(CTFTIME_ACTIVE_RSS),
                 ),
             ]),
+            channel: rss::Channel::default(),
         }
     }
 
@@ -73,17 +75,17 @@ impl FeedsMap {
         self.feeds.get(value)
     }
 
-    pub async fn handle_feeds(&self, rss: Vec<&str>, actions: Vec<fn(&rss::Item)>) {
+    pub async fn handle_feeds(&mut self, rss: Vec<&str>, actions: Vec<fn(&rss::Item)>) {
         for r in rss {
             match self.get(r) {
                 Some(value) => {
-                    let channel = read_feed(&value)
+                    self.channel = read_feed(&value)
                         .await
                         .expect("failed to create channel in main");
 
-                    for i in channel.items() {
+                    for i in self.channel.items() {
                         for action in &actions {
-                            action(&i);
+                            action(i);
                         }
                     }
                 }
