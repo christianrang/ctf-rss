@@ -6,8 +6,8 @@ Read CTF rss feeds to find upcoming ctfs
 TODO: work on making this better
 ```
 pushd ctf_rss
-cargo run --bin=cli -- ctfitime_upcoming
-cargo run --bin=cli -- ctfitime_active
+cargo run --bin=cli -- ctftime_upcoming
+cargo run --bin=cli -- ctftime_active
 popd
 ```
 
